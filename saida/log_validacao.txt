@@ -1,7 +1,11 @@
-OK  rastro × comissoes: 22 linhas, 0 divergentes
-OK  rastro × divergencias: 92 linhas, 0 divergentes
-OK  rastro × notas: 0 linhas, 0 divergentes
-OK  rastro × lancamentos: 0 linhas, 0 divergentes
-OK  rastro × pendencias: 4 linhas, 0 divergentes
+INFO competência detectada: 09/2026 | arquivos: {'orbe': '01_orbe_relatorio_comissoes_set2026.csv', 'taxas': '02_tabela_taxas_contratadas.xlsx', 'ponte': '03_email_ponte_cambio_relatorio_set2026.eml', 'plano': '04_plano_de_contas_fenix_erp.csv', 'aurora': '05a_extrato_banco_aurora_cc4471_set2026.csv', 'meridiano': '05b_extrato_banco_meridiano_cc90233_set2026.ofx'}
+INFO rodapé Ponte: spread total declarado 78073.59 | soma de todas as linhas 78073.59 | soma das operações únicas 77251.71
+INFO conciliação TED Meridiano × liquidações Ponte: 21 de 21 TEDs batem ao centavo
+OK  rastro × comissoes: 36 linhas, 0 divergentes
+OK  rastro × divergencias: 115 linhas, 0 divergentes
+OK  rastro × notas: 23 linhas, 0 divergentes
+OK  rastro × lancamentos: 184 linhas, 0 divergentes
+OK  rastro × pendencias: 16 linhas, 0 divergentes
 OK  truncamento × valor_taxa Orbe: 0 linhas diferentes
 OK  conciliação checkout (base contratada): Σ valor_taxa Orbe 231880.36 = comissão 230304.13 + divergência 1576.23 + taxa fora da comissão 0 -> FECHA
+OK  lançamentos classificados 184 de 184 linhas de extrato

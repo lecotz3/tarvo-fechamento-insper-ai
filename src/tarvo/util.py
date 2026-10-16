@@ -72,20 +72,20 @@ def taxa_pct(x) -> tuple[Decimal | None, str | None]:
     return ((v * 100) if v < 1 else v).normalize(), None
 
 
-def fmt_brl(x: Decimal | None) -> str:
-    return "" if x is None else f"{money(x):.2f}"
-
-
-def fmt_pct(x: Decimal | None) -> str:
-    return "" if x is None else f"{x.quantize(Decimal('0.0001')).normalize():f}"
-
-
 def write_csv(df: pd.DataFrame, path: Path) -> None:
     """CSV no formato da correção automática: ';' separador, '.' decimal, UTF-8."""
     path.parent.mkdir(parents=True, exist_ok=True)
     out = df.copy()
+
+    def limpar(v):
+        if isinstance(v, Decimal):
+            return f"{v:f}"
+        if isinstance(v, str):  # texto livre não pode carregar o separador nem quebra de linha
+            return re.sub(r"[\r\n]+", " ", v.replace(";", ","))
+        return v
+
     for c in out.columns:
-        out[c] = out[c].map(lambda v: f"{v:f}" if isinstance(v, Decimal) else v)
+        out[c] = out[c].map(limpar)
     out.to_csv(path, sep=";", index=False, encoding="utf-8", lineterminator="\n")
 
 
@@ -96,3 +96,19 @@ def find_file(pasta: Path, *padroes: str) -> Path:
         if achados:
             return achados[0]
     raise FileNotFoundError(f"Nenhum arquivo em {pasta} casa com {padroes}")
+
+
+def ratear(total: Decimal, partes: list[Decimal]) -> list[Decimal]:
+    """Distribui `total` (já em centavos) proporcionalmente a `partes`, cada fatia em centavos,
+    com a soma exatamente igual ao total (a sobra de centavos vai para as maiores frações)."""
+    base = sum(partes, Decimal("0"))
+    if base == 0:
+        return [Decimal("0.00")] * len(partes)
+    exatas = [total * p / base for p in partes]
+    fatias = [e.quantize(CENTAVO, rounding=ROUND_DOWN) for e in exatas]
+    sobra = int(((total - sum(fatias, Decimal("0"))) / CENTAVO).to_integral_value())
+    passo = CENTAVO if sobra >= 0 else -CENTAVO
+    ordem = sorted(range(len(partes)), key=lambda i: abs(exatas[i] - fatias[i]), reverse=True)
+    for i in ordem[:abs(sobra)]:
+        fatias[i] += passo
+    return fatias

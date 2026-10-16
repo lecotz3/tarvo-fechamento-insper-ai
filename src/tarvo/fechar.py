@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from . import checkout, lojistas
+from . import checkout, conciliacao, lancamentos, lojistas, notas, pendencias, remessa
 from .loaders import carregar_tudo
 from .resultado import Resultado
 from .util import write_csv
@@ -54,11 +54,27 @@ def main(argv=None) -> int:
     cad = lojistas.montar(fontes.taxas, a.config / "de_para_ec.csv")
     res = Resultado()
 
+    competencia = fontes.orbe["data_movimento"].dt.strftime("%m/%Y").mode().iloc[0]
+    res.log.append(f"INFO competência detectada: {competencia} | arquivos: {fontes.arquivos}")
+
     det = checkout.processar(fontes.orbe, cad, prem, res)
+    det_rem = remessa.processar(fontes.ponte, fontes.ponte_meta, cad, prem, res)
+    notas.processar(res, prem, fontes.ponte_meta, competencia)
+
+    chaves = lancamentos.chaves_lojistas(fontes.taxas["lojista_planilha"], fontes.orbe["nome_estabelecimento"],
+                                         fontes.ponte["cliente"], cad.nome.values())
+    regras = lancamentos.carregar_regras(a.config / "regras_contas.csv")
+    det_lan = lancamentos.processar([fontes.aurora, fontes.meridiano], regras, chaves, res)
+    conc = conciliacao.processar(fontes.ponte, fontes.meridiano, res)
+
+    com_mov = set(det["cnpj"].dropna()) | set(det_rem["cnpj"].dropna())
+    pendencias.processar(res, cad, com_mov)
 
     erros = validar(res, fontes, det, prem["checkout"]["base_comissao"])
     gravar(res, a.saida)
     write_csv(det, a.saida / "detalhe" / "detalhe_checkout.csv")
+    write_csv(det_rem, a.saida / "detalhe" / "detalhe_remessa.csv")
+    write_csv(conc, a.saida / "detalhe" / "conciliacao_remessas_meridiano.csv")
     (a.saida / "log_validacao.txt").write_text("\n".join(res.log) + "\n", encoding="utf-8")
 
     print("\n".join(res.log))

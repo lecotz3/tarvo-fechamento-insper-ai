@@ -1,0 +1,25 @@
+ordem;banco;padrao;conta_codigo;confianca;pendencia;quem_decide;nota
+10;AURORA;^TED RECEBIDA .*ORBE ADQUIRENCIA;1.1.03.001;0.98;;;Liquidação de recebíveis da adquirente
+20;*;TRANSF ENTRE CONTAS|MESMA TITULARIDADE;1.1.09.001;0.99;;;Transferência entre contas próprias (Aurora <-> Meridiano)
+30;AURORA;CONTABILIDADE;4.2.06;0.90;;;Serviços contábeis
+40;AURORA;CONDOMINIO;4.2.02;0.95;;;Aluguel e condomínio
+50;AURORA;AMAZON WEB SERVICES|\bAWS\b;4.2.03;0.95;;;Cloud
+60;AURORA;GOOGLE WORKSPACE;4.2.04;0.95;;;Software/assinatura
+70;AURORA;PAGTO SALARIOS|FOLHA;2.1.04.001;0.85;;;Premissa H12: pagamento de folha de mês anterior baixa o passivo
+80;AURORA;GPS INSS|\bINSS\b;2.1.04.002;0.90;;;Premissa H12
+90;AURORA;GRF FGTS|\bFGTS\b;2.1.04.003;0.90;;;Premissa H12
+100;AURORA;DARF 0561|IRRF;2.1.03.004;0.90;;;Premissa H12 (código DARF 0561 = IRRF sobre salários)
+110;AURORA;DARF 8109|\bPIS\b;2.1.03.001;0.90;;;Premissa H12
+120;AURORA;DARF 2172|COFINS;2.1.03.002;0.90;;;Premissa H12
+130;AURORA;\bISS\b;2.1.03.003;0.90;;;Premissa H12
+140;*;^TAR |TARIFA;4.2.01;0.97;;;Tarifas bancárias
+150;AURORA;SEM IDENTIFICACAO;1.1.09.002;0.90;CREDITO_NAO_IDENTIFICADO;Financeiro Tarvo;Crédito sem identificação do pagador
+160;AURORA;^DEVOLUCAO PIX;2.1.01.001;0.60;DEVOLUCAO_PIX;Financeiro Tarvo;Devolução de PIX de lojista: natureza a confirmar (repasse devolvido? crédito do lojista?)
+170;AURORA;^PIX ENVIADO <LOJISTA>;2.1.01.001;0.95;;;Repasse a lojista (nome bate com lojista do cadastro)
+200;MERIDIANO;^PIX RECEB <LOJISTA>;2.1.02.001;0.95;;;Recursos de lojista para remessa
+210;MERIDIANO;^TED ENVIADA PONTE CAMBIO.*LIQ;2.1.02.001;0.95;;;Liquidação de remessas na Ponte
+220;MERIDIANO;^TED RECEB PONTE CAMBIO.*REPASSE COMISSAO;1.1.03.002;0.90;;;Recebimento da participação do mês anterior (baixa do recebível)
+230;MERIDIANO;APLICACAO AUTOMATICA|RESGATE AUTOMATICO;1.1.02.001;0.97;;;Aplicação automática
+240;MERIDIANO;RENDIMENTO;3.2.01;0.95;;;Rendimento de aplicação
+250;MERIDIANO;SEGURO;4.2.05;0.95;;;Seguros
+260;MERIDIANO;\bIOF\b;4.3.01;0.95;;;IOF
