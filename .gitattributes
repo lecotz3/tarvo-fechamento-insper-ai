@@ -1,0 +1,4 @@
+data/** -text
+saida/** -text
+*.py text eol=lf
+*.md text eol=lf
