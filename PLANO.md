@@ -1,5 +1,23 @@
 # Plano de execução — Hackathon Barte AI · Case Tarvo (fechamento set/2026)
 
+## STATUS: 16/10, 20h25 (adiantado em relação ao cronograma)
+- **Pronto e publicado** em https://github.com/lecotz3/tarvo-fechamento-insper-ai: Mínimo + Alvo + boa parte do Extra.
+  - As 7 saídas, o rastro e o validador estão prontos.
+  - 11 testes passam, incluindo a simulação de outubro.
+  - Há uma conciliação Meridiano × Ponte e um resumo de 1 página.
+  - A IA está implementada para o resíduo do extrato, desligada por padrão.
+- **O que falta é principalmente humano:**
+  - mandar as perguntas e trazer as respostas para `config/`;
+  - pitch;
+  - MOMENTOS.md;
+  - exportar os transcripts no fim (`python PROMPTS/exportar_transcripts.py`);
+  - checkpoints.
+- **Divisão para amanhã (3 pessoas):**
+  - **P1, cliente:** Slack, `HIPOTESES.md` (registro com horário) e ajuste de `config/premissas.toml` / `de_para_ec.csv` a cada resposta. Rodar `fechar` e `pytest` depois de cada mudança.
+  - **P2, auditoria:** conferir à mão, contra os arquivos originais, 3 lojistas (sugestão: Rota Global, Mundo Aberto e Atlas), a NF da Ponte e 10 lançamentos. Cada erro encontrado vira teste. Ficar de olho no #hackathon-avisos e rodar o pipeline se chegarem dados novos.
+  - **P3, pitch:** montar a apresentação a partir de `saida/resumo_fechamento.md` e da seção 9 deste plano. Escrever os checkpoints e revisar MOMENTOS.md.
+- **Regra de ouro:** nenhuma mudança de número sem uma resposta do financeiro ou um teste que justifique.
+
 > Montado em 16/10 às ~20h, depois de ler o enunciado e **todos os 6 arquivos do data pack** (cópia intacta em `data/set2026/`).
 > Os números marcados como *preliminar* saíram de scripts exploratórios e precisam ser revalidados pelo pipeline final.
 
