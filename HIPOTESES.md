@@ -17,6 +17,9 @@
 - [FATO] Ponte: o spread % aplicado bate com a planilha para todos os lojistas, **exceto Mundo Aberto**: 1,50% aplicado × 1,2% na planilha ("negociado em jul/26"), em 23 operações.
 - [FATO] O e-mail da Ponte diz: "repasse da participação de 50% do spread realizado … creditado em 06/10/2026, mediante recebimento da nota fiscal de intermediação". Também diz que "APROVADO C/ RESSALVA" segue normalmente para liquidação.
 - [FATO] CNPJs aparecem com máscara, sem máscara e como número sem o zero à esquerda (Fluente `3229837000103`, Campus `8780784000120`). Normalizar com zfill(14).
+- [FATO] Conciliação Meridiano × Ponte: cada TED "PONTE CAMBIO ... LIQ OPERACOES" é igual a Σ (Valor R$ + IOF R$) das operações que liquidam no dia útil seguinte (21 de 21 TEDs batem ao centavo). No dia da operação duplicada (PC-0926-0162), a TED cobre a operação **uma vez só**: o erro é só do relatório, a Tarvo não pagou em dobro.
+- [FATO] Por lojista, a soma dos PIX recebidos no Meridiano é igual a Σ (Valor R$ + IOF R$) das remessas dele, ao centavo, para 13 dos 14 lojistas. A exceção é a Ponte Aérea: **R$ 18.240,00 a mais**, exatamente o PIX MRD2026090425 (17/09, "PONTE AEREA" sem acento, valor redondo). É o único aporte sem remessa correspondente.
+- [FATO] A conciliação Aurora × Orbe (TEDs × líquido) não fecha de forma simples, porque a Orbe liquida parcelado e antecipado em datas diferentes. Fica fora do escopo e está documentada como limitação.
 - [FATO] Os saldos do extrato Aurora conferem linha a linha (saldo final −R$ 1.920.088,60). O OFX Meridiano tem 100 transações com FITID único.
 
 ## 2. Premissas (default até resposta)
@@ -35,6 +38,9 @@
 | H10 | Atlas: sem taxa contratada, não calcular divergência. A comissão usa a taxa aplicada, marcada como pendência. | Alarme falso ou comissão faltando. |
 | H11 | Operações contratadas em setembro e liquidadas em 01/10 entram em setembro (competência do relatório). | 6 operações. |
 | H12 | Pagamentos de folha e tributos de competência anterior dão baixa no passivo (2.1.03.x / 2.1.04.x). | Classificação de ~9 lançamentos. |
+| H13 | Comissão de remessa do lojista = 50% × soma dos spreads dele, com um arredondamento só. Os centavos são rateados entre as operações para o rastro fechar exato. | ≤ R$ 0,01 por lojista. |
+| H14 | O PIX de R$ 18.240 da Ponte Aérea continua em 2.1.02.001 (recurso de lojista), com confiança 0,5 e pendência, até o financeiro dizer o que é. | 1 lançamento. |
+| H15 | Divergência de remessa = Spread R$ cobrado − (Valor ME × PTAX × spread contratado). Reporta o valor cheio cobrado a mais do lojista, não só a metade da Tarvo. | Valor das divergências de remessa (Mundo Aberto). |
 
 ## 3. Perguntas ao financeiro: prontas para colar
 
@@ -77,7 +83,7 @@ d) Atlas Idiomas (EC 1076801732) tem 57 lançamentos em setembro, mas só aparec
 3) Rota Global teve alguma renegociação em 12/09? Desde essa data a Orbe aplica as taxas da tabela 2025.
 4) Folha 08/2026, INSS, FGTS, ISS, PIS, COFINS e IRRF pagos em setembro: lançamos como baixa do passivo (2.1.03/2.1.04) ou direto como despesa?
 5) Aurora: um PIX de R$ 7.350 de 38.686.002/0001-80 "SEM IDENTIFICACAO" (16/09). Conhecem esse CNPJ? E a "DEVOLUCAO PIX - MUNDO ABERTO" de R$ 12.400 (23/09), o que é?
-6) Meridiano: o PIX de R$ 18.240,00 de "PONTE AEREA ESTUDANTIL" (17/09, FITID MRD2026090425) é aporte normal para remessa?
+6) Meridiano: os PIX de cada lojista batem ao centavo com o valor + IOF das remessas dele, menos um. O PIX de R$ 18.240,00 de "PONTE AEREA ESTUDANTIL" (17/09, FITID MRD2026090425) não tem remessa correspondente. É adiantamento de remessa de outubro, crédito de outro pagador ou valor a devolver?
 7) Remessas contratadas em setembro e liquidadas em 01/10 (6 operações) entram no fechamento de setembro? Operações "APROVADO C/ RESSALVA" geram comissão normalmente?
 8) Lojista com comissão de checkout zerada ou negativa no mês (por estornos) recebe NF? Como fica?
 ```

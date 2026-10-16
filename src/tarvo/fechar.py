@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from . import checkout, conciliacao, lancamentos, lojistas, notas, pendencias, remessa
+from . import checkout, conciliacao, lancamentos, lojistas, notas, pendencias, remessa, resumo
 from .loaders import carregar_tudo
 from .resultado import Resultado
 from .util import write_csv
@@ -47,6 +47,8 @@ def main(argv=None) -> int:
     ap.add_argument("--dados", type=Path, default=RAIZ / "data" / "set2026")
     ap.add_argument("--saida", type=Path, default=RAIZ / "saida")
     ap.add_argument("--config", type=Path, default=RAIZ / "config")
+    ap.add_argument("--ia", action="store_true",
+                    help="usa IA (Claude) para sugerir conta dos lançamentos que nenhuma regra cobre")
     a = ap.parse_args(argv)
 
     prem = tomllib.loads((a.config / "premissas.toml").read_text(encoding="utf-8"))
@@ -64,7 +66,16 @@ def main(argv=None) -> int:
     chaves = lancamentos.chaves_lojistas(fontes.taxas["lojista_planilha"], fontes.orbe["nome_estabelecimento"],
                                          fontes.ponte["cliente"], cad.nome.values())
     regras = lancamentos.carregar_regras(a.config / "regras_contas.csv")
-    det_lan = lancamentos.processar([fontes.aurora, fontes.meridiano], regras, chaves, res)
+    classificador = None
+    if a.ia:
+        from .ia import criar_classificador
+        classificador, msg = criar_classificador(fontes.plano)
+        res.log.append(f"INFO {msg}")
+    det_lan = lancamentos.processar([fontes.aurora, fontes.meridiano], regras, chaves, res,
+                                    classificador_ia=classificador)
+    n_ia = sum(1 for l in res.lancamentos if l["metodo"] == "IA")
+    res.log.append(f"INFO lançamentos por método: REGRA {sum(1 for l in res.lancamentos if l['metodo'] == 'REGRA')}"
+                   f" | IA {n_ia} | HUMANO {sum(1 for l in res.lancamentos if l['metodo'] == 'HUMANO')}")
     conc = conciliacao.processar(fontes.ponte, fontes.meridiano, res)
 
     com_mov = set(det["cnpj"].dropna()) | set(det_rem["cnpj"].dropna())
@@ -76,6 +87,7 @@ def main(argv=None) -> int:
     write_csv(det_rem, a.saida / "detalhe" / "detalhe_remessa.csv")
     write_csv(conc, a.saida / "detalhe" / "conciliacao_remessas_meridiano.csv")
     (a.saida / "log_validacao.txt").write_text("\n".join(res.log) + "\n", encoding="utf-8")
+    resumo.gerar(res, competencia, a.saida / "resumo_fechamento.md")
 
     print("\n".join(res.log))
     print(f"\nComissões: {len(res.comissoes)} | Divergências: {len(res.divergencias)} | "
