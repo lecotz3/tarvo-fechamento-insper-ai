@@ -1,0 +1,5 @@
+ec_orbe;cnpj;nome_canonico;status;evidencia
+1043396662;78576234000179;Horizonte Viagens;PENDENTE_CONFIRMACAO;Planilha sem EC. Nome na Orbe 'HORIZONTE VIAGENS TURISMO'. Taxas aplicadas (2,69% a vista / 3,19% 2-6x) = contrato Horizonte Viagens (L8). PIX Aurora 'HORIZONTE VIAGENS E TURISM'.
+1043300981;66564512000199;Novo Horizonte Intercambio;PENDENTE_CONFIRMACAO;Planilha sem EC. Nome na Orbe 'HORIZONTE INTERCAMBIO' (ambiguo). Taxas aplicadas (2,39% a vista / 2,89% 2-6x) = contrato Novo Horizonte (L28), NAO Horizonte Viagens. PIX Aurora separado 'NOVO HORIZONTE INTERCAMBIO'.
+1038867654;07752116000126;Kiwi Experience;PENDENTE_CONFIRMACAO;Planilha diz 'EC pendente'. Nome na Orbe 'KIWI EXPERIENCE TURISMO'. Taxas aplicadas = contrato Kiwi (L9).
+1076801732;39566044000119;Atlas Idiomas Ltda;SEM_CONTRATO;Nao esta na aba 'Taxas vigentes'. CNPJ tirado da aba 'ANTIGO 2025 - nao usar' (so para identificar, as taxas dessa aba NAO sao usadas).

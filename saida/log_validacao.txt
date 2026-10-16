@@ -1,0 +1,7 @@
+OK  rastro × comissoes: 22 linhas, 0 divergentes
+OK  rastro × divergencias: 92 linhas, 0 divergentes
+OK  rastro × notas: 0 linhas, 0 divergentes
+OK  rastro × lancamentos: 0 linhas, 0 divergentes
+OK  rastro × pendencias: 4 linhas, 0 divergentes
+OK  truncamento × valor_taxa Orbe: 0 linhas diferentes
+OK  conciliação checkout (base contratada): Σ valor_taxa Orbe 231880.36 = comissão 230304.13 + divergência 1576.23 + taxa fora da comissão 0 -> FECHA

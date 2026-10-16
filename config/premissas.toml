@@ -1,0 +1,37 @@
+# Premissas de negócio. Cada uma corresponde a uma linha de HIPOTESES.md.
+# Quando o financeiro responder, mude aqui e rode de novo. Não é preciso mexer no código.
+
+[tarvo]
+cnpj = "84626315000139"
+razao_social = "TARVO PAGAMENTOS LTDA"
+
+[checkout]
+# H1: base da comissão. "contratada" = taxa da planilha (a diferença vira divergência a devolver);
+#     "aplicada" = valor_taxa que a Orbe cobrou.
+base_comissao = "contratada"
+# H2: data usada para achar a taxa vigente de um ESTORNO/REVERSÃO: "venda_original" ou "movimento".
+data_taxa_estorno = "venda_original"
+# H3: antecipação (e a reversão dela) entra na comissão de checkout.
+incluir_antecipacao = true
+# H10: lojista sem taxa contratada (ex.: Atlas). "aplicada_com_pendencia" = comissão pela taxa da Orbe
+#      e uma pendência aberta. "excluir" = fica fora da comissão, só pendência.
+sem_contrato = "aplicada_com_pendencia"
+
+[remessa]
+# H4: participação da Tarvo no spread. "email" = lê o percentual do corpo do e-mail da Ponte.
+participacao = "email"
+participacao_fallback_pct = 50
+# H6: spread quando a planilha está em branco ou diz "padrão".
+spread_padrao_pct = 1.5
+# H7: spread negativo. "pendencia" = fica fora da comissão até alguém decidir; "aceitar" = abate da comissão.
+spread_negativo = "pendencia"
+# Diferença mínima (em pontos percentuais) entre o spread aplicado e o contratado para virar divergência.
+# A Ponte arredonda a taxa do cliente; ruído de até ~0,02 p.p. é normal.
+tolerancia_spread_pp = 0.05
+# Base da comissão de remessa: "realizado" = Spread R$ do relatório (contrato Ponte: 50% do spread realizado).
+base_comissao = "realizado"
+
+[notas]
+# H5: tomador da NF de remessa. "PONTE" = uma NF contra a Ponte Câmbio; "LOJISTA" = uma por lojista.
+remessa_tomador = "PONTE"
+ponte_razao_social = "PONTE CAMBIO S.A."
